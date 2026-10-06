@@ -1,2 +1,1 @@
-// Type definitions will be added here
-export {};
+export type { Tender, Requirement, RequirementsFile } from './tender';

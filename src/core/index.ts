@@ -1,2 +1,1 @@
-// Core application logic will be added here
-export {};
+export { parseRequirementsFile, RequirementsParseError } from './requirementsParser';
