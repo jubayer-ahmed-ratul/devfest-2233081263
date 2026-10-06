@@ -1,12 +1,22 @@
 import { useState } from 'react';
 import { RequirementsUploader } from '../components/RequirementsUploader';
 import { TenderInfo } from '../components/TenderInfo';
-import { RequirementsList } from '../components/RequirementsList';
 import { FileUploader } from '../components/FileUploader';
 import { UploadedFilesList } from '../components/UploadedFilesList';
+import { RequirementMatchRow } from '../components/RequirementMatchRow';
+import { DocumentSelectModal } from '../components/DocumentSelectModal';
+import { MatchingSummary } from '../components/MatchingSummary';
 import { parseRequirementsFile, RequirementsParseError } from '../core';
 import { processPDFFile, checkLimits, findDuplicates } from '../core';
-import type { RequirementsFile, UploadedFile } from '../types';
+import { 
+  getMatchedFile, 
+  getAvailableFiles, 
+  matchFile, 
+  unmatchRequirement,
+  removeFileMatches,
+  getMatchingStats,
+} from '../core';
+import type { RequirementsFile, UploadedFile, Match } from '../types';
 import type { Language } from '../i18n';
 import { translate } from '../i18n';
 
@@ -15,8 +25,12 @@ export function TenderSetup() {
   const [data, setData] = useState<RequirementsFile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [matches, setMatches] = useState<Match[]>([]);
   const [processing, setProcessing] = useState(false);
   const [pdfErrors, setPdfErrors] = useState<string[]>([]);
+  
+  // Modal state
+  const [selectingForRequirement, setSelectingForRequirement] = useState<string | null>(null);
 
   const handleFileLoad = (content: string) => {
     setError(null);
@@ -115,12 +129,49 @@ export function TenderSetup() {
       file.isDuplicate = duplicateHashes.has(file.hash);
     });
     
+    // Remove any matches associated with this file
+    const newMatches = removeFileMatches(id, matches);
+    
     setUploadedFiles(newFiles);
+    setMatches(newMatches);
+  };
+
+  const handleStartMatching = (requirementId: string) => {
+    setSelectingForRequirement(requirementId);
+  };
+
+  const handleSelectDocument = (fileId: string) => {
+    if (selectingForRequirement) {
+      const newMatches = matchFile(selectingForRequirement, fileId, matches);
+      setMatches(newMatches);
+    }
+    setSelectingForRequirement(null);
+  };
+
+  const handleUnmatch = (requirementId: string) => {
+    const newMatches = unmatchRequirement(requirementId, matches);
+    setMatches(newMatches);
   };
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'en' ? 'bn' : 'en');
   };
+
+  // Get available files for the currently selecting requirement
+  const availableFilesForSelection = selectingForRequirement
+    ? getAvailableFiles(selectingForRequirement, uploadedFiles, matches)
+    : [];
+
+  const getRequirementTitle = (reqId: string): string => {
+    if (!data) return '';
+    const req = data.requirements.find(r => r.id === reqId);
+    if (!req) return '';
+    return language === 'en' ? req.title_en : req.title_bn;
+  };
+
+  const matchingStats = data
+    ? getMatchingStats(data.requirements.length, uploadedFiles.length, matches)
+    : null;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
@@ -194,17 +245,16 @@ export function TenderSetup() {
           </div>
         )}
 
-        {/* Tender Information and Requirements */}
+        {/* Tender Information */}
         {data && (
           <div className="space-y-6 mb-6">
             <TenderInfo tender={data.tender} language={language} />
-            <RequirementsList requirements={data.requirements} language={language} />
           </div>
         )}
 
         {/* PDF Upload Section */}
         {data && (
-          <div className="space-y-6">
+          <div className="space-y-6 mb-6">
             <FileUploader
               onFilesSelected={handlePDFsSelected}
               disabled={processing}
@@ -221,9 +271,47 @@ export function TenderSetup() {
             
             <UploadedFilesList
               files={uploadedFiles}
+              requirements={data.requirements}
+              matches={matches}
               onRemove={handleRemoveFile}
               language={language}
             />
+          </div>
+        )}
+
+        {/* Matching Section */}
+        {data && uploadedFiles.length > 0 && (
+          <div className="space-y-6">
+            {/* Matching Summary */}
+            {matchingStats && (
+              <MatchingSummary stats={matchingStats} language={language} />
+            )}
+
+            {/* Requirements Matching */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                {translate('requirements', language)}
+              </h2>
+              <div className="space-y-3">
+                {data.requirements.map((req) => {
+                  const fileId = getMatchedFile(req.id, matches);
+                  const matchedFile = fileId 
+                    ? uploadedFiles.find(f => f.id === fileId) ?? null
+                    : null;
+
+                  return (
+                    <RequirementMatchRow
+                      key={req.id}
+                      requirement={req}
+                      matchedFile={matchedFile}
+                      onMatch={() => handleStartMatching(req.id)}
+                      onUnmatch={() => handleUnmatch(req.id)}
+                      language={language}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
 
@@ -234,6 +322,17 @@ export function TenderSetup() {
               {translate('loadRequirementsToStart', language)}
             </p>
           </div>
+        )}
+
+        {/* Document Selection Modal */}
+        {selectingForRequirement && (
+          <DocumentSelectModal
+            title={getRequirementTitle(selectingForRequirement)}
+            availableFiles={availableFilesForSelection}
+            onSelect={handleSelectDocument}
+            onCancel={() => setSelectingForRequirement(null)}
+            language={language}
+          />
         )}
       </div>
     </div>

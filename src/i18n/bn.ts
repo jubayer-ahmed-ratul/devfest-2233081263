@@ -25,7 +25,7 @@ export const bn = {
   optional: 'ঐচ্ছিক',
   expiryRequired: 'মেয়াদ প্রয়োজন',
   notRequired: 'প্রয়োজন নেই',
-  totalRequirements: 'মোট',
+  total: 'মোট',
   requirement: 'প্রয়োজনীয়তা',
   requirementsPlural: 'প্রয়োজনীয়তা',
 
@@ -69,4 +69,27 @@ export const bn = {
 
   // Instructions
   loadRequirementsToStart: 'শুরু করতে একটি requirements.json ফাইল লোড করুন',
+
+  // Matching
+  matchDocument: 'ডকুমেন্ট ম্যাচ করুন',
+  selectDocument: 'ডকুমেন্ট নির্বাচন করুন',
+  selectDocumentFor: '{title} এর জন্য ডকুমেন্ট নির্বাচন করুন',
+  change: 'পরিবর্তন করুন',
+  unmatch: 'আনম্যাচ করুন',
+  matched: 'ম্যাচ করা হয়েছে',
+  unmatched: 'আনম্যাচড',
+  noDocumentMatched: 'কোনো ডকুমেন্ট ম্যাচ করা হয়নি',
+  availableDocuments: 'উপলব্ধ ডকুমেন্ট',
+  cancel: 'বাতিল',
+  matchedTo: 'ম্যাচ করা হয়েছে',
+  unavailableDuplicateMatched: 'অনুপলব্ধ — ডুপ্লিকেট কন্টেন্ট ইতিমধ্যে ম্যাচ করা হয়েছে',
+  cannotSelectDuplicate: 'এই ফাইলের ডুপ্লিকেট কন্টেন্ট ইতিমধ্যে অন্য প্রয়োজনীয়তার সাথে ম্যাচ করা হয়েছে',
+  noAvailableFiles: 'ম্যাচ করার জন্য কোনো ফাইল উপলব্ধ নেই',
+  matchingSummary: 'ম্যাচিং সারাংশ',
+  totalRequirements: 'মোট প্রয়োজনীয়তা',
+  matchedRequirements: 'ম্যাচ করা প্রয়োজনীয়তা',
+  unmatchedRequirements: 'আনম্যাচড প্রয়োজনীয়তা',
+  totalDocuments: 'মোট ডকুমেন্ট',
+  matchedDocuments: 'ম্যাচ করা ডকুমেন্ট',
+  unmatchedDocuments: 'আনম্যাচড ডকুমেন্ট',
 } as const;

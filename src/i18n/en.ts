@@ -25,7 +25,7 @@ export const en = {
   optional: 'Optional',
   expiryRequired: 'Expiry required',
   notRequired: 'Not required',
-  totalRequirements: 'Total',
+  total: 'Total',
   requirement: 'requirement',
   requirementsPlural: 'requirements',
 
@@ -69,6 +69,29 @@ export const en = {
 
   // Instructions
   loadRequirementsToStart: 'Load a requirements.json file to get started',
+
+  // Matching
+  matchDocument: 'Match document',
+  selectDocument: 'Select document',
+  selectDocumentFor: 'Select document for {title}',
+  change: 'Change',
+  unmatch: 'Unmatch',
+  matched: 'Matched',
+  unmatched: 'Unmatched',
+  noDocumentMatched: 'No document matched',
+  availableDocuments: 'Available documents',
+  cancel: 'Cancel',
+  matchedTo: 'Matched to',
+  unavailableDuplicateMatched: 'Unavailable — duplicate content already matched',
+  cannotSelectDuplicate: 'This file has duplicate content that is already matched to another requirement',
+  noAvailableFiles: 'No available files to match',
+  matchingSummary: 'Matching Summary',
+  totalRequirements: 'Total requirements',
+  matchedRequirements: 'Matched requirements',
+  unmatchedRequirements: 'Unmatched requirements',
+  totalDocuments: 'Total documents',
+  matchedDocuments: 'Matched documents',
+  unmatchedDocuments: 'Unmatched documents',
 } as const;
 
 export type TranslationKeys = keyof typeof en;

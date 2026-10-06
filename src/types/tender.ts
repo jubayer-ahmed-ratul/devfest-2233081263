@@ -29,3 +29,8 @@ export interface UploadedFile {
   hash: string;
   isDuplicate: boolean;
 }
+
+export interface Match {
+  requirementId: string;
+  fileId: string;
+}

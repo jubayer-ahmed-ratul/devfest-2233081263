@@ -63,7 +63,7 @@ export function RequirementsList({ requirements, language }: RequirementsListPro
         </table>
       </div>
       <div className="mt-4 text-sm text-gray-600">
-        {translate('totalRequirements', language)}: {requirements.length} {' '}
+        {translate('total', language)}: {requirements.length} {' '}
         {requirements.length === 1 
           ? translate('requirement', language) 
           : translate('requirementsPlural', language)

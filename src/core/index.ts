@@ -7,3 +7,15 @@ export {
   formatFileSize,
   type PDFProcessingResult,
 } from './pdfFileProcessor';
+export {
+  getMatchedFile,
+  getMatchedRequirement,
+  getFilesByHash,
+  isHashMatchedToOtherRequirement,
+  isFileAvailableForRequirement,
+  getAvailableFiles,
+  matchFile,
+  unmatchRequirement,
+  removeFileMatches,
+  getMatchingStats,
+} from './matchingLogic';
