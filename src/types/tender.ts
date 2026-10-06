@@ -19,3 +19,13 @@ export interface RequirementsFile {
   tender: Tender;
   requirements: Requirement[];
 }
+
+export interface UploadedFile {
+  id: string;
+  file: File;
+  name: string;
+  size: number;
+  pages: number;
+  hash: string;
+  isDuplicate: boolean;
+}

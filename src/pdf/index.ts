@@ -1,2 +1,1 @@
-// PDF processing utilities will be added here
-export {};
+export { readPDFPageCount, PDFReadError } from './pdfReader';

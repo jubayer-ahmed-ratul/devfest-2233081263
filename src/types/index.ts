@@ -1,1 +1,1 @@
-export type { Tender, Requirement, RequirementsFile } from './tender';
+export type { Tender, Requirement, RequirementsFile, UploadedFile } from './tender';

@@ -1,11 +1,14 @@
 import { useRef } from 'react';
+import type { Language } from '../i18n';
+import { translate } from '../i18n';
 
 interface RequirementsUploaderProps {
   onFileLoad: (content: string) => void;
   disabled?: boolean;
+  language: Language;
 }
 
-export function RequirementsUploader({ onFileLoad, disabled }: RequirementsUploaderProps) {
+export function RequirementsUploader({ onFileLoad, disabled, language }: RequirementsUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +65,10 @@ export function RequirementsUploader({ onFileLoad, disabled }: RequirementsUploa
         disabled={disabled}
         className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
       >
-        Load requirements.json
+        {translate('loadRequirements', language)}
       </button>
       <p className="text-sm text-gray-600">
-        Select a requirements.json file from your computer
+        {translate('selectRequirementsFile', language)}
       </p>
     </div>
   );
